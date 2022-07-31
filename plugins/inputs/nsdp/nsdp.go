@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+	"time"
 
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
@@ -20,9 +21,10 @@ import (
 )
 
 type NSDP struct {
-	Target  string `toml:"target"`
-	Timeout int    `toml:"timeout"`
-	Debug   bool   `toml:"debug"`
+	Target      string `toml:"target"`
+	DeviceLimit int    `toml:"device_limit"`
+	Timeout     int    `toml:"timeout"`
+	Debug       bool   `toml:"debug"`
 
 	Log telegraf.Logger `toml:"-"`
 }
@@ -38,6 +40,8 @@ func (plugin *NSDP) SampleConfig() string {
 	return `
   ## The target address to use for NSDP processing
   # target = "255.255.255.255:63322"
+  ## The device limit to use
+  # device_limit = 0
   ## The receive timeout to use (in seconds)
   # timeout = 2
   ## Enable debug output
@@ -55,6 +59,8 @@ func (plugin *NSDP) Gather(a telegraf.Accumulator) error {
 		return err
 	}
 	defer conn.Close()
+	conn.ReceiveDeviceLimit = uint(plugin.DeviceLimit)
+	conn.ReceiveTimeout = time.Duration(plugin.Timeout) * time.Second
 	request := nsdplib.NewMessage(nsdplib.ReadRequest)
 	request.AppendTLV(nsdplib.EmptyDeviceModel())
 	request.AppendTLV(nsdplib.EmptyDeviceName())
@@ -92,7 +98,7 @@ func (plugin *NSDP) processResponse(a telegraf.Accumulator, response *nsdplib.Me
 		}
 	}
 	for port, statistic := range portStatistics {
-		if statistic.Received != 0 || statistic.Send != 0 {
+		if statistic.Received != 0 || statistic.Sent != 0 {
 			tags := make(map[string]string)
 			tags["nsdp_device_model"] = deviceModel
 			tags["nsdp_device_name"] = deviceName
@@ -101,7 +107,7 @@ func (plugin *NSDP) processResponse(a telegraf.Accumulator, response *nsdplib.Me
 			tags["nsdp_device_port_id"] = fmt.Sprintf("%s:%d", deviceName, port)
 			fields := make(map[string]interface{})
 			fields["received"] = statistic.Received
-			fields["sent"] = statistic.Send
+			fields["sent"] = statistic.Sent
 			fields["packets"] = statistic.Packets
 			fields["broadcasts"] = statistic.Broadcasts
 			fields["multicasts"] = statistic.Multicasts
