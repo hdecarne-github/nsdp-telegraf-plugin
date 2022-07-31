@@ -92,7 +92,7 @@ func (plugin *NSDP) processResponse(a telegraf.Accumulator, response *nsdplib.Me
 		}
 	}
 	for port, statistic := range portStatistics {
-		if statistic.Packets != 0 {
+		if statistic.Received != 0 || statistic.Send != 0 {
 			tags := make(map[string]string)
 			tags["nsdp_device_model"] = deviceModel
 			tags["nsdp_device_name"] = deviceName
@@ -101,7 +101,7 @@ func (plugin *NSDP) processResponse(a telegraf.Accumulator, response *nsdplib.Me
 			tags["nsdp_device_port_id"] = fmt.Sprintf("%s:%d", deviceName, port)
 			fields := make(map[string]interface{})
 			fields["received"] = statistic.Received
-			fields["send"] = statistic.Send
+			fields["sent"] = statistic.Send
 			fields["packets"] = statistic.Packets
 			fields["broadcasts"] = statistic.Broadcasts
 			fields["multicasts"] = statistic.Multicasts
