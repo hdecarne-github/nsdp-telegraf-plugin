@@ -24,12 +24,12 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/go/pkg/mod
+            ~/go
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Run Build
-        run: make dist
+        run: make dist check
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:

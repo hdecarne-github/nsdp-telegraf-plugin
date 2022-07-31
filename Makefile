@@ -10,8 +10,6 @@ GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 GOBIN ?= $(shell go env GOPATH)/bin
 
-LDFLAGS := $(LDFLAGS) -X $(plugin_package).plugin=$(plugin_name) -X $(plugin_package).version=$(plugin_version) -X $(plugin_package).goos=$(GOOS) -X $(plugin_package).goarch=$(GOARCH)
-
 deps:
 	go mod download -x
 
@@ -24,9 +22,9 @@ tidy:
 
 build: deps
 ifneq (windows, $(GOOS))
-	go build -ldflags "$(LDFLAGS)" -o build/bin/$(plugin_cmd) ./cmd/$(plugin_cmd)
+	go build -o build/bin/$(plugin_cmd) ./cmd/$(plugin_cmd)
 else
-	go build -ldflags "$(LDFLAGS)" -o build/bin/$(plugin_cmd).exe ./cmd/$(plugin_cmd)
+	go build -o build/bin/$(plugin_cmd).exe ./cmd/$(plugin_cmd)
 endif
 	cp $(plugin_conf) build/bin/
 

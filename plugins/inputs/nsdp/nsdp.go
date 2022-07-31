@@ -19,24 +19,18 @@ import (
 	nsdplib "github.com/hdecarne-github/go-nsdp"
 )
 
-const undefined string = "<undefined>"
-
-var plugin = undefined
-var version = undefined
-var goos = undefined
-var goarch = undefined
-
 type NSDP struct {
 	Target  string `toml:"target"`
 	Timeout int    `toml:"timeout"`
 	Debug   bool   `toml:"debug"`
 
-	Log telegraf.Logger
+	Log telegraf.Logger `toml:"-"`
 }
 
 func NewNSDP() *NSDP {
 	return &NSDP{
-		Target: nsdplib.IPv4BroadcastTarget,
+		Target:  nsdplib.IPv4BroadcastTarget,
+		Timeout: 2,
 	}
 }
 
