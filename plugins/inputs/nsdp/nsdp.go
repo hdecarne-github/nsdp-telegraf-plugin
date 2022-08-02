@@ -40,7 +40,7 @@ func (plugin *NSDP) SampleConfig() string {
 	return `
   ## The target address to use for NSDP processing
   # target = "255.255.255.255:63322"
-  ## The device limit to use
+  ## The device limit to use (0 means no limit)
   # device_limit = 0
   ## The receive timeout to use (in seconds)
   # timeout = 2
