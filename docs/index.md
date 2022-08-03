@@ -39,11 +39,7 @@ nsdp_port_statistic,nsdp_device_ip=10.1.1.2,nsdp_device_model=GS108Ev3,nsdp_devi
 ```
 Every port having a non-zero received or sent value is reported.
 
-![Port Statistic - Receive rates](screen_port_statistic_received.png)
-
-![Port Statistic - Send rates](screen_port_statistic_sent.png)
-
-![Port Statistic - Error rates](screen_port_statistic_errors.png)
+![Port Statistic](screen_port_statistic.png)
 
 ### License
 This project is subject to the the MIT License.
