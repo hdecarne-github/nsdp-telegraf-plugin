@@ -2,8 +2,9 @@
 [![Build](https://github.com/hdecarne-github/nsdp-telegraf-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/hdecarne-github/nsdp-telegraf-plugin/actions/workflows/build.yml)
 
 > [!NOTE]
-> From release v1.34.0 on this plugin is a core plugin of Telegraf
+> From Telegraf release v1.34.0 on this plugin is a core plugin of Telegraf
 > and no longer needs to be installed separately as an external plugin.
+>
 > See https://github.com/influxdata/telegraf/tree/master/plugins/inputs/nsdp for further details.
 
 ## About nsdp-telegraf-plugin
